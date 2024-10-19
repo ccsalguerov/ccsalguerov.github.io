@@ -1,0 +1,84 @@
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-align: center;
+    background-image: url('fondo.png'); /* Aquí va tu imagen */
+    background-size: cover; /* La imagen cubrirá toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed; /* La imagen se mantiene fija al hacer scroll */
+
+}
+
+#container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 5px solid #ffcc00;
+    border-radius: 15px;
+    background-color: #fff8dc;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    color: #ff6347;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button {
+    display: inline-block;
+    padding: 20px 40px;
+    font-size: 24px;
+    margin: 10px;
+    background-color: #ffcc00;
+    color: #fff;
+    text-decoration: none;
+    border: 2px solid #ff6347;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+/* Estilos para el cocodrilo */
+.cocodrilo {
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    height: 80px;
+    background-image: url('cocodrilo.png'); /* Imagen del cocodrilo */
+    background-size: cover;
+    background-position: center;
+    text-indent: -9999px; /* Ocultar texto */
+    border: none;
+    cursor: pointer;
+    transition: transform 0.5s ease-in-out;
+}
+
+.cocodrilo:hover {
+    transform: translateX(10px); /* Mover el cocodrilo hacia la derecha */
+}
+
+.button:hover {
+    background-color: #ff6347;
+}
+
+iframe {
+    margin-top: 20px;
+    border: none;
+}
+#register-container, #container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 5px solid #ffcc00;
+    border-radius: 15px;
+    background-color: #fff8dc;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+

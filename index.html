@@ -9,13 +9,20 @@
 <body>
     <div id="container">
         <h1>Registro de Usuario</h1>
-        <form action="menu.html" method="GET"> <!-- Cambia POST a GET -->
+        <form id="registerForm">
             <label for="username">Nombre de Usuario:</label><br>
             <input type="text" id="username" name="username" required><br><br>
             <label for="password">Contraseña:</label><br>
             <input type="password" id="password" name="password" required><br><br>
-            <input type="submit" value="Registrarse">
+            <input type="button" value="Registrarse" onclick="redirectToMenu()">
         </form>
     </div>
+
+    <script>
+        function redirectToMenu() {
+            // Aquí puedes validar el registro antes de redirigir si lo deseas
+            window.location.href = "menu.html"; // Redirige al menú de cuentos
+        }
+    </script>
 </body>
 </html>

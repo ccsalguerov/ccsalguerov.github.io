@@ -14,14 +14,24 @@
             <input type="text" id="username" name="username" required><br><br>
             <label for="password">Contraseña:</label><br>
             <input type="password" id="password" name="password" required><br><br>
-            <input type="button" value="Registrarse" onclick="redirectToMenu()">
+            <input type="button" value="Registrarse" onclick="registerUser()">
         </form>
     </div>
 
     <script>
-        function redirectToMenu() {
-            // Aquí puedes validar el registro antes de redirigir si lo deseas
-            window.location.href = "menu.html"; // Redirige al menú de cuentos
+        function registerUser() {
+            // Obtener los valores del formulario
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Validar el formulario (ejemplo simple)
+            if (username && password) {
+                // Simula el registro y redirige al menú
+                alert('Registro exitoso. Redirigiendo al menú...');
+                window.location.href = 'menu.html'; // Redirige al menú de cuentos
+            } else {
+                alert('Por favor, completa todos los campos.');
+            }
         }
     </script>
 </body>

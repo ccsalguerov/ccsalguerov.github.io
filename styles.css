@@ -47,7 +47,7 @@ h1 {
     display: inline-block;
     width: 150px;
     height: 80px;
-    background-image: url('cocodrilo.png'); /* Imagen del cocodrilo */
+    background-image: url('cocodrilo.PNG'); /* Imagen del cocodrilo */
     background-size: cover;
     background-position: center;
     text-indent: -9999px; /* Ocultar texto */

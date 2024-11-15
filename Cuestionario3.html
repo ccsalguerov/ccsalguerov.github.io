@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Capitán Climático</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 5px solid #ffcc00;
+            border-radius: 15px;
+            background-color: #fff8dc;
+            text-align: left;
+        }
+
+        h1 {
+            color: #ff6347;
+        }
+
+        .question {
+            display: none; /* Inicialmente ocultamos las preguntas */
+            margin: 15px 0;
+        }
+
+        .question.active {
+            display: block; /* Mostramos la pregunta activa */
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Espacio entre los botones */
+            flex-wrap: wrap; /* Permite que los botones se acomoden en una nueva línea si es necesario */
+        }
+
+        .option-btn {
+            display: inline-block;
+            padding: 10px;
+            margin: 10px;
+            background-color: #fff8dc;
+            border: 2px solid #ffcc00;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .option-btn img {
+            width: 100%;
+            height: auto;
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: contain;
+        }
+
+        .audio-btn {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .audio-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .submit-btn, .navigation-btn, .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover, .navigation-btn:hover, .back-btn:hover {
+            background-color: #ff6347;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .selected {
+            border: 2px solid #ff6347;
+        }
+
+        /* Contenedor para los botones en fila horizontal */
+        .buttons-container {
+            display: flex;
+            justify-content: space-between; /* Distribuye los botones */
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <h1>Cuestionario cuento de Bingo</h1>
+
+        <!-- Pregunta 1 -->
+        <div class="question" id="question1">
+            <p><strong>1. ¿Por qué Bingo no quería dormir?</strong></p>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q1')">
+                    <img src="jugar.png" alt="Jugar">
+                    Quería seguir jugando
+                </button>
+                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q1')">
+                    <img src="cama.png" alt="Cama">
+                    Su cama era incómoda  
+                </button>
+            </div>
+            <button class="audio-btn" onclick="playAudio(1)">
+                <img src="play.png" alt="Reproducir audio">
+            </button>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="question" id="question2">
+            <p><strong>2. ¿Cuál era la primera parte del plan de la mamá de Bingo?</strong></p>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q2')">
+                    <img src="bañarse.png" alt="Bañarse">
+                    Bañarse
+                </button>
+                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q2')">
+                    <img src="jugar.png" alt="Jugar">
+                    Jugar
+                </button>
+            </div>
+            <button class="audio-btn" onclick="playAudio(2)">
+                <img src="play.png" alt="Reproducir audio"> 
+            </button>
+        </div>
+
+        <!-- Pregunta 3 -->
+        <div class="question" id="question3">
+            <p><strong>3. ¿Quién ayudó a dormir a Bingo?</strong></p>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q3')">
+                    <img src="mamaconeja.png" alt="Mamá Conejo">
+                    Mamá Conejo
+                </button>
+                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q3')">
+                    <img src="papacone.png" alt="Papá Conejo">
+                    Papá Conejo
+                </button>
+            </div>
+            <button class="audio-btn" onclick="playAudio(3)">
+                <img src="play.png" alt="Reproducir audio"> 
+            </button>
+        </div>
+
+        <!-- Botón para enviar respuestas -->
+        <button class="submit-btn" id="submitBtn" onclick="checkAnswers()">Enviar Respuestas</button>
+
+        <!-- Resultado -->
+        <div id="result" class="result"></div>
+
+        <!-- Botón "Siguiente" -->
+        <div>
+            <button class="navigation-btn" id="nextBtn" onclick="navigateQuestion(1)">Siguiente</button>
+        </div>
+
+        <!-- Botón "Volver al Menú" en la última pregunta -->
+        <div>
+            <button class="back-btn" id="backBtn" onclick="goToMenu()">Volver al Menú</button>
+        </div>
+
+    </div>
+
+    <script>
+        let selectedAnswers = {
+            q1: null,
+            q2: null,
+            q3: null
+        };
+        let currentQuestion = 0;
+
+        // Función para reproducir el audio específico de cada pregunta
+        function playAudio(questionNumber) {
+            const audio = new Audio(`autio${questionNumber}.mp3`); // Carga el nuevo archivo de audio según la pregunta
+            audio.play();
+        }
+
+        // Función para seleccionar una respuesta
+        function selectAnswer(btn, answer, question) {
+            const buttons = btn.parentNode.querySelectorAll('.option-btn');
+            buttons.forEach(button => button.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedAnswers[question] = answer;
+        }
+
+        // Función para avanzar entre preguntas
+        function navigateQuestion(direction) {
+            const questions = document.querySelectorAll('.question');
+            questions[currentQuestion].classList.remove('active');
+            currentQuestion += direction;
+
+            if (currentQuestion < 0) currentQuestion = 0;
+            if (currentQuestion >= questions.length) currentQuestion = questions.length - 1;
+
+            questions[currentQuestion].classList.add('active');
+            updateButtons();
+        }
+
+        // Actualiza los botones de navegación
+        function updateButtons() {
+            const nextBtn = document.getElementById("nextBtn");
+            const submitBtn = document.getElementById("submitBtn");
+            const backBtn = document.getElementById("backBtn");
+            const questions = document.querySelectorAll('.question');
+
+            nextBtn.style.display = currentQuestion === questions.length - 1 ? "none" : "inline-block";
+            submitBtn.style.display = currentQuestion === questions.length - 1 ? "inline-block" : "none";
+            backBtn.style.display = currentQuestion === questions.length - 1 ? "inline-block" : "none";
+        }
+
+        // Función para comprobar respuestas
+        function checkAnswers() {
+            let correctAnswers = 0;
+            if (selectedAnswers.q1 === 'correcto') correctAnswers++;
+            if (selectedAnswers.q2 === 'correcto') correctAnswers++;
+            if (selectedAnswers.q3 === 'correcto') correctAnswers++;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = "Has obtenido " + correctAnswers + " de 3 respuestas correctas.";
+        }
+
+        // Función para redirigir al menú
+        function goToMenu() {
+            window.location.href = "menu.html"; // Cambia "menu.html" por la URL de tu menú
+        }
+
+        // Inicializa la primera pregunta
+        document.addEventListener("DOMContentLoaded", function() {
+            navigateQuestion(0);
+        });
+    </script>
+</body>
+</html>

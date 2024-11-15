@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuestionario del Cuento del Cocodrilo</title>
+    <title>Cuestionario de Roco</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         #quiz-container {
@@ -21,7 +21,19 @@
         }
 
         .question {
+            display: none; /* Inicialmente ocultamos las preguntas */
             margin: 15px 0;
+        }
+
+        .question.active {
+            display: block; /* Mostramos la pregunta activa */
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Espacio entre los botones */
+            flex-wrap: wrap; /* Permite que los botones se acomoden en una nueva línea si es necesario */
         }
 
         .option-btn {
@@ -36,12 +48,30 @@
         }
 
         .option-btn img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
+            width: 100%;
+            height: auto;
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: contain;
         }
 
-        .submit-btn {
+        .audio-btn {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .audio-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .submit-btn, .navigation-btn, .back-btn {
             display: inline-block;
             padding: 10px 20px;
             background-color: #ffcc00;
@@ -51,7 +81,7 @@
             cursor: pointer;
         }
 
-        .submit-btn:hover {
+        .submit-btn:hover, .navigation-btn:hover, .back-btn:hover {
             background-color: #ff6347;
         }
 
@@ -64,55 +94,91 @@
         .selected {
             border: 2px solid #ff6347;
         }
+
+        /* Contenedor para los botones en fila horizontal */
+        .buttons-container {
+            display: flex;
+            justify-content: space-between; /* Distribuye los botones */
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
+
     <div id="quiz-container">
         <h1>Cuestionario del Cuento del Cocodrilo</h1>
 
         <!-- Pregunta 1 -->
-        <div class="question">
+        <div class="question" id="question1">
             <p><strong>1. ¿Quién es Roco?</strong></p>
-            <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q1')">
-                <img src="cocodrilo.png" alt="Cocodrilo">
-                Cocodrilo
-            </button>
-            <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q1')">
-                <img src="elefante.png" alt="Elefante">
-                Elefante
+            <div class="options-container">
+                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q1')">
+                    <img src="cocodrilo.png" alt="Cocodrilo">
+                    Cocodrilo
+                </button>
+                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q1')">
+                    <img src="elefante.png" alt="Elefante">
+                    Elefante
+                </button>
+            </div>
+            <button class="audio-btn" onclick="playAudio(1)">
+                <img src="play.png" alt="Reproducir audio">
             </button>
         </div>
 
         <!-- Pregunta 2 -->
-        <div class="question">
+        <div class="question" id="question2">
             <p><strong>2. ¿A qué le tenía miedo Roco?</strong></p>
-            <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q2')">
-                <img src="bañarse.png" alt="Bañarse">
-                Bañarse
-            </button>
-            <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q2')">
-                <img src="alturas.png" alt="Alturas">
-                Las alturas
+            <div class="options-container">
+                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q2')">
+                    <img src="bañarse.png" alt="Bañarse">
+                    Bañarse
+                </button>
+                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q2')">
+                    <img src="alturas.png" alt="Alturas">
+                    Las alturas
+                </button>
+            </div>
+            <button class="audio-btn" onclick="playAudio(2)">
+                <img src="play.png" alt="Reproducir audio"> 
             </button>
         </div>
 
         <!-- Pregunta 3 -->
-        <div class="question">
+        <div class="question" id="question3">
             <p><strong>3. ¿Quién le decía a Roco que se bañara?</strong></p>
-            <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q3')">
-                <img src="mama.jpg" alt="Su mamá">
-                Su mamá
-            </button>
-            <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q3')">
-                <img src="papa.jpg" alt="Su papá">
-                Su papá
+            <div class="options-container">
+                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q3')">
+                    <img src="mama.png" alt="Su mamá">
+                    Su mamá
+                </button>
+                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q3')">
+                    <img src="papa.png" alt="Su papá">
+                    Su papá
+                </button>
+            </div>
+            <button class="audio-btn" onclick="playAudio(3)">
+                <img src="play.png" alt="Reproducir audio"> 
             </button>
         </div>
 
-        <button class="submit-btn" onclick="checkAnswers()">Enviar Respuestas</button>
+        <!-- Botón para enviar respuestas -->
+        <button class="submit-btn" id="submitBtn" onclick="checkAnswers()">Enviar Respuestas</button>
 
         <!-- Resultado -->
         <div id="result" class="result"></div>
+
+        <!-- Botón "Siguiente" -->
+        <div>
+            <button class="navigation-btn" id="nextBtn" onclick="navigateQuestion(1)">Siguiente</button>
+        </div>
+
+        <!-- Botón "Volver al Menú" en la última pregunta -->
+        <div>
+            <button class="back-btn" id="backBtn" onclick="goToMenu()">Volver al Menú</button>
+        </div>
+
     </div>
 
     <script>
@@ -121,31 +187,65 @@
             q2: null,
             q3: null
         };
+        let currentQuestion = 0;
 
+        // Función para reproducir audio según la pregunta
+        function playAudio(questionNumber) {
+            const audio = new Audio(`audio${questionNumber}.mp3`);
+            audio.play();
+        }
+
+        // Función para seleccionar una respuesta
         function selectAnswer(btn, answer, question) {
-            // Desmarcar otras opciones para esta pregunta
             const buttons = btn.parentNode.querySelectorAll('.option-btn');
             buttons.forEach(button => button.classList.remove('selected'));
-
-            // Marcar la opción seleccionada
             btn.classList.add('selected');
-            
-            // Guardar la respuesta seleccionada
             selectedAnswers[question] = answer;
         }
 
+        // Función para avanzar entre preguntas
+        function navigateQuestion(direction) {
+            const questions = document.querySelectorAll('.question');
+            questions[currentQuestion].classList.remove('active');
+            currentQuestion += direction;
+
+            if (currentQuestion < 0) currentQuestion = 0;
+            if (currentQuestion >= questions.length) currentQuestion = questions.length - 1;
+
+            questions[currentQuestion].classList.add('active');
+            updateButtons();
+        }
+
+        // Actualiza los botones de navegación
+        function updateButtons() {
+            const nextBtn = document.getElementById("nextBtn");
+            const submitBtn = document.getElementById("submitBtn");
+            const questions = document.querySelectorAll('.question');
+
+            nextBtn.style.display = currentQuestion === questions.length - 1 ? "none" : "inline-block";
+            submitBtn.style.display = currentQuestion === questions.length - 1 ? "inline-block" : "none";
+        }
+
+        // Función para comprobar respuestas
         function checkAnswers() {
             let correctAnswers = 0;
-
-            // Verificar las respuestas
             if (selectedAnswers.q1 === 'correcto') correctAnswers++;
             if (selectedAnswers.q2 === 'correcto') correctAnswers++;
             if (selectedAnswers.q3 === 'correcto') correctAnswers++;
 
-            // Mostrar resultado
             const resultDiv = document.getElementById('result');
             resultDiv.textContent = "Has obtenido " + correctAnswers + " de 3 respuestas correctas.";
         }
+
+        // Función para redirigir al menú
+        function goToMenu() {
+            window.location.href = "menu.html"; // Cambia "menu.html" por la URL de tu menú
+        }
+
+        // Inicializa la primera pregunta
+        document.addEventListener("DOMContentLoaded", function() {
+            navigateQuestion(0);
+        });
     </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 const stories = [
     {
         text: "Érase una vez un lobo que quería ser amigo de los corderos."

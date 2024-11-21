@@ -6,6 +6,7 @@
     <title>Cuestionario de Roco</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Estilos principales */
         #quiz-container {
             max-width: 600px;
             margin: auto;
@@ -21,87 +22,73 @@
         }
 
         .question {
-            display: none; /* Inicialmente ocultamos las preguntas */
+            display: none;
             margin: 15px 0;
         }
 
         .question.active {
-            display: block; /* Mostramos la pregunta activa */
+            display: block;
         }
 
         .options-container {
             display: flex;
             justify-content: center;
-            gap: 10px; /* Espacio entre los botones */
-            flex-wrap: wrap; /* Permite que los botones se acomoden en una nueva línea si es necesario */
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .option-btn {
-            display: inline-block;
             padding: 10px;
-            margin: 10px;
-            background-color: #fff8dc;
-            border: 2px solid #ffcc00;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .option-btn img {
-            width: 100%;
-            height: auto;
-            max-width: 100px;
-            max-height: 100px;
-            object-fit: contain;
-        }
-
-        .audio-btn {
-            display: inline-block;
-            margin-top: 10px;
-            background-color: #ff6347;
-            color: white;
+            background-color: transparent;
             border: none;
-            padding: 8px;
-            border-radius: 5px;
             cursor: pointer;
+            width: 150px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
         }
 
-        .audio-btn img {
-            width: 20px;
-            height: 20px;
+        /* Overlay para retroalimentación */
+        .feedback-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: none;
+            z-index: 1000;
         }
 
-        .submit-btn, .navigation-btn, .back-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #ffcc00;
-            color: white;
+        /* Estilos de los botones de navegación */
+        .navigation-btn {
+            padding: 10px;
+            background-color: transparent;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: inline-block;
         }
 
-        .submit-btn:hover, .navigation-btn:hover, .back-btn:hover {
-            background-color: #ff6347;
+        /* Imágenes de los botones */
+        #back-btn {
+            background-image: url('flechaatras.jpg');
         }
 
-        .result {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
+        #play-btn {
+            background-image: url('play.jpg');
         }
 
-        .selected {
-            border: 2px solid #ff6347;
+        #forward-btn {
+            background-image: url('flechaderecha.jpg');
         }
-
-        /* Contenedor para los botones en fila horizontal */
-        .buttons-container {
-            display: flex;
-            justify-content: space-between; /* Distribuye los botones */
-            margin-top: 20px;
-        }
-
     </style>
 </head>
 <body>
@@ -113,94 +100,69 @@
         <div class="question" id="question1">
             <p><strong>1. ¿Quién es Roco?</strong></p>
             <div class="options-container">
-                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q1')">
-                    <img src="cocodrilo.PNG" alt="Cocodrilo">
-                    Cocodrilo
-                </button>
-                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q1')">
-                    <img src="elefante.png" alt="Elefante">
-                    Elefante
-                </button>
+                <button class="option-btn" onclick="showFeedbackImage(true)" style="background-image: url('cocodrilo.PNG');"></button>
+                <button class="option-btn" onclick="showFeedbackImage(false)" style="background-image: url('elefante.png');"></button>
             </div>
-            <button class="audio-btn" onclick="playAudio(1)">
-                <img src="play.png" alt="Reproducir audio">
-            </button>
         </div>
 
         <!-- Pregunta 2 -->
         <div class="question" id="question2">
             <p><strong>2. ¿A qué le tenía miedo Roco?</strong></p>
             <div class="options-container">
-                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q2')">
-                    <img src="bañarse.png" alt="Bañarse">
-                    Bañarse
-                </button>
-                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q2')">
-                    <img src="alturas.png" alt="Alturas">
-                    Las alturas
-                </button>
+                <button class="option-btn" onclick="showFeedbackImage(true)" style="background-image: url('bañarse.png');"></button>
+                <button class="option-btn" onclick="showFeedbackImage(false)" style="background-image: url('alturas.png');"></button>
             </div>
-            <button class="audio-btn" onclick="playAudio(2)">
-                <img src="play.png" alt="Reproducir audio"> 
-            </button>
         </div>
 
         <!-- Pregunta 3 -->
         <div class="question" id="question3">
             <p><strong>3. ¿Quién le decía a Roco que se bañara?</strong></p>
             <div class="options-container">
-                <button class="option-btn" onclick="selectAnswer(this, 'correcto', 'q3')">
-                    <img src="mama.png" alt="Su mamá">
-                    Su mamá
-                </button>
-                <button class="option-btn" onclick="selectAnswer(this, 'incorrecto', 'q3')">
-                    <img src="papa.png" alt="Su papá">
-                    Su papá
-                </button>
+                <button class="option-btn" onclick="showFeedbackImage(true)" style="background-image: url('mama.png');"></button>
+                <button class="option-btn" onclick="showFeedbackImage(false)" style="background-image: url('papa.png');"></button>
             </div>
-            <button class="audio-btn" onclick="playAudio(3)">
-                <img src="play.png" alt="Reproducir audio"> 
-            </button>
         </div>
 
-        <!-- Botón para enviar respuestas -->
-        <button class="submit-btn" id="submitBtn" onclick="checkAnswers()">Enviar Respuestas</button>
-
-        <!-- Resultado -->
-        <div id="result" class="result"></div>
-
-        <!-- Botón "Siguiente" -->
-        <div>
-            <button class="navigation-btn" id="nextBtn" onclick="navigateQuestion(1)">Siguiente</button>
+        <!-- Botones de Navegación -->
+        <div class="navigation-buttons" style="text-align: center; margin-top: 20px;">
+            <button id="back-btn" class="navigation-btn" onclick="goToMenu()"></button>
+            <button id="play-btn" class="navigation-btn" onclick="playAudio()"></button>
+            <button id="forward-btn" class="navigation-btn" onclick="navigateQuestion(1)"></button>
         </div>
-
-        <!-- Botón "Volver al Menú" en la última pregunta -->
-        <div>
-            <button class="back-btn" id="backBtn" onclick="goToMenu()">Volver al Menú</button>
-        </div>
-
     </div>
 
+    <div id="feedbackOverlay" class="feedback-overlay"></div>
+
     <script>
-        let selectedAnswers = {
-            q1: null,
-            q2: null,
-            q3: null
-        };
         let currentQuestion = 0;
 
-        // Función para reproducir audio según la pregunta
-        function playAudio(questionNumber) {
-            const audio = new Audio(`audio${questionNumber}.mp3`);
-            audio.play();
-        }
+        // Función para mostrar la imagen de retroalimentación y reproducir audio
+        function showFeedbackImage(isCorrect) {
+            const feedbackOverlay = document.getElementById("feedbackOverlay");
+            let feedbackAudio;
 
-        // Función para seleccionar una respuesta
-        function selectAnswer(btn, answer, question) {
-            const buttons = btn.parentNode.querySelectorAll('.option-btn');
-            buttons.forEach(button => button.classList.remove('selected'));
-            btn.classList.add('selected');
-            selectedAnswers[question] = answer;
+            if (isCorrect) {
+                feedbackOverlay.style.backgroundImage = "url('imagen1.jpg')"; // Imagen correcta
+                feedbackAudio = new Audio('muybien.mp3'); // Audio para respuesta correcta
+            } else {
+                feedbackOverlay.style.backgroundImage = "url('imagen2.jpg')"; // Imagen incorrecta
+                feedbackAudio = new Audio('mal.mp3'); // Audio para respuesta incorrecta
+            }
+
+            feedbackOverlay.style.display = "block";
+
+            // Reproducir el audio si es posible
+            feedbackAudio.addEventListener('canplaythrough', () => {
+                feedbackAudio.play().catch((error) => {
+                    console.log("Reproducción de audio bloqueada:", error);
+                    alert("Por favor, haz clic en la página para permitir que se reproduzca el audio.");
+                });
+            });
+
+            setTimeout(() => {
+                feedbackOverlay.style.display = "none";
+                navigateQuestion(1);
+            }, 2000);
         }
 
         // Función para avanzar entre preguntas
@@ -209,40 +171,37 @@
             questions[currentQuestion].classList.remove('active');
             currentQuestion += direction;
 
-            if (currentQuestion < 0) currentQuestion = 0;
-            if (currentQuestion >= questions.length) currentQuestion = questions.length - 1;
-
-            questions[currentQuestion].classList.add('active');
-            updateButtons();
+            if (currentQuestion >= questions.length) {
+                currentQuestion = questions.length - 1;
+            } else {
+                questions[currentQuestion].classList.add('active');
+            }
         }
 
-        // Actualiza los botones de navegación
-        function updateButtons() {
-            const nextBtn = document.getElementById("nextBtn");
-            const submitBtn = document.getElementById("submitBtn");
-            const questions = document.querySelectorAll('.question');
-
-            nextBtn.style.display = currentQuestion === questions.length - 1 ? "none" : "inline-block";
-            submitBtn.style.display = currentQuestion === questions.length - 1 ? "inline-block" : "none";
-        }
-
-        // Función para comprobar respuestas
-        function checkAnswers() {
-            let correctAnswers = 0;
-            if (selectedAnswers.q1 === 'correcto') correctAnswers++;
-            if (selectedAnswers.q2 === 'correcto') correctAnswers++;
-            if (selectedAnswers.q3 === 'correcto') correctAnswers++;
-
-            const resultDiv = document.getElementById('result');
-            resultDiv.textContent = "Has obtenido " + correctAnswers + " de 3 respuestas correctas.";
-        }
-
-        // Función para redirigir al menú
+        // Función para volver al menú
         function goToMenu() {
-            window.location.href = "menu.html"; // Cambia "menu.html" por la URL de tu menú
+            window.location.href = 'menu.html';
         }
 
-        // Inicializa la primera pregunta
+        // Función para reproducir el audio según la pregunta actual
+        function playAudio() {
+            let audioFile;
+            if (currentQuestion === 0) {
+                audioFile = 'audio1.mp3';
+            } else if (currentQuestion === 1) {
+                audioFile = 'audio2.mp3';
+            } else if (currentQuestion === 2) {
+                audioFile = 'audio3.mp3';
+            }
+
+            if (audioFile) {
+                const audio = new Audio(audioFile);
+                audio.play().catch((error) => {
+                    console.log("Reproducción de audio bloqueada:", error);
+                });
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             navigateQuestion(0);
         });

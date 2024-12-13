@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Roco</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos principales */
+        #quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 5px solid #ffcc00;
+            border-radius: 15px;
+            background-color: #fff8dc;
+            text-align: left;
+        }
+
+        h1 {
+            color: #ff6347;
+        }
+
+        .question {
+            display: none;
+            margin: 15px 0;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 150px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Overlay para retroalimentación */
+        .feedback-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Estilos de los botones de navegación */
+        .navigation-btn {
+            padding: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: inline-block;
+        }
+
+        /* Imágenes de los botones */
+        #back-btn {
+            background-image: url('flechaatras.jpg');
+        }
+
+        #play-btn {
+            background-image: url('play.jpg');
+        }
+
+        #forward-btn {
+            background-image: url('flechaderecha.jpg');
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <h1>Cuestionario del oso mañoso</h1>
+
+        <!-- Pregunta 1 -->
+        <div class="question" id="question1">
+            <p><strong>1. ¿Quién es el oso mañoso?</strong></p>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFeedbackImage(true)" style="background-image: url('oso.png');"></button>
+                <button class="option-btn" onclick="showFeedbackImage(false)" style="background-image: url('elefante.png');"></button>
+            </div>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="question" id="question2">
+            <p><strong>2. ¿quien es el rinoceronte?</strong></p>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFeedbackImage(true)" style="background-image: url('rino.png');"></button>
+                <button class="option-btn" onclick="showFeedbackImage(false)" style="background-image: url('coco.png');"></button>
+            </div>
+        </div>
+
+
+        <!-- Botones de Navegación -->
+        <div class="navigation-buttons" style="text-align: center; margin-top: 20px;">
+            <button id="back-btn" class="navigation-btn" onclick="goToMenu()"></button>
+            <button id="play-btn" class="navigation-btn" onclick="playAudio()"></button>
+            <button id="forward-btn" class="navigation-btn" onclick="navigateQuestion(1)"></button>
+        </div>
+    </div>
+
+    <div id="feedbackOverlay" class="feedback-overlay"></div>
+
+    <script>
+        let currentQuestion = 0;
+
+        // Función para mostrar la imagen de retroalimentación y reproducir audio
+        function showFeedbackImage(isCorrect) {
+            const feedbackOverlay = document.getElementById("feedbackOverlay");
+            let feedbackAudio;
+
+            if (isCorrect) {
+                feedbackOverlay.style.backgroundImage = "url('imagen1.jpg')"; // Imagen correcta
+                feedbackAudio = new Audio('muybien.mp3'); // Audio para respuesta correcta
+            } else {
+                feedbackOverlay.style.backgroundImage = "url('imagen2.jpg')"; // Imagen incorrecta
+                feedbackAudio = new Audio('mal.mp3'); // Audio para respuesta incorrecta
+            }
+
+            feedbackOverlay.style.display = "block";
+
+            // Reproducir el audio si es posible
+            feedbackAudio.addEventListener('canplaythrough', () => {
+                feedbackAudio.play().catch((error) => {
+                    console.log("Reproducción de audio bloqueada:", error);
+                    alert("Por favor, haz clic en la página para permitir que se reproduzca el audio.");
+                });
+            });
+
+            setTimeout(() => {
+                feedbackOverlay.style.display = "none";
+                navigateQuestion(1);
+            }, 2000);
+        }
+
+        // Función para avanzar entre preguntas
+        function navigateQuestion(direction) {
+            const questions = document.querySelectorAll('.question');
+            questions[currentQuestion].classList.remove('active');
+            currentQuestion += direction;
+
+            if (currentQuestion >= questions.length) {
+                currentQuestion = questions.length - 1;
+            } else {
+                questions[currentQuestion].classList.add('active');
+            }
+        }
+
+        // Función para volver al menú
+        function goToMenu() {
+            window.location.href = 'menu.html';
+        }
+
+        // Función para reproducir el audio según la pregunta actual
+        function playAudio() {
+            let audioFile;
+            if (currentQuestion === 0) {
+                audioFile = 'oso.mp3';
+            } else if (currentQuestion === 1) {
+                audioFile = 'rino.mp3';
+            } else if (currentQuestion === 2) {
+                audioFile = 'audio3.mp3';
+            }
+
+            if (audioFile) {
+                const audio = new Audio(audioFile);
+                audio.play().catch((error) => {
+                    console.log("Reproducción de audio bloqueada:", error);
+                });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            navigateQuestion(0);
+        });
+    </script>
+</body>
+</html>
